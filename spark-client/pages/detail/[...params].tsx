@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { darkTheme } from "../../styles/theme";
 
@@ -14,7 +14,6 @@ interface Params {
 interface Props {
   params: string[];
 }
-
 
 const DetailContainer = styled.div`
   padding: 20px;
@@ -40,10 +39,6 @@ export default function Post({ params }: Props) {
     },
   });
 
-  useEffect(() => {
-    console.log(data);
-  }, []);
-
   const onClick = () => {
     cache.writeFragment({
       id: `posts:${post_id}`,
@@ -65,7 +60,7 @@ export default function Post({ params }: Props) {
         <div>Loading...</div>
       </DetailContainer>
     );
-  //console.log(getPost)
+
   return <DetailPage params={params} data={data} onClick={onClick} />;
 }
 

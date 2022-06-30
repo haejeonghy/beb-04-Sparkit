@@ -24,9 +24,7 @@ export default function Mypage() {
   const { data } = useQuery<GetPostsByUserId>(USER_INFO, {
     variables: { userId: userId },
   });
-  const UserInfoAmendClick = () => {
-    console.log("hi");
-  };
+
 
   if (!data) return <>loading</>;
   return (

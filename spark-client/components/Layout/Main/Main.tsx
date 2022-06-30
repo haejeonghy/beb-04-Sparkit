@@ -25,7 +25,6 @@ const Main = (props: Props) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           if (io !== null) io.disconnect();
-          console.log("hi");
         }
       });
     });

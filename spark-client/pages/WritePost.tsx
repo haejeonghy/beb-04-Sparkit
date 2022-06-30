@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
-import { useQuery, useMutation, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import axios from "axios";
 import NavBar from "../components/Layout/Navbar";
 import { useEffect } from "react";
@@ -26,7 +26,7 @@ export default function WritePost() {
   }, []);
   GetUserId();
   const [userId] = useRecoilState(userIdState);
-  console.log(userId);
+
   const onComplete = () => {
     if (!complete) {
       router.push("/");
@@ -41,12 +41,7 @@ export default function WritePost() {
     // 해시태그 #으로 구분
     let hashtags = hash.split("#");
     hashtags = hashtags.filter((element, i) => element != "");
-    console.log(userId);
-    console.log("토큰", accessToken);
-    console.log("제목: ", title);
-    console.log("컨텐츠: ", content);
-    console.log("해시태그: ", hashtags);
-    console.log("url들: ", isdataURL);
+
     if (title != undefined && content != undefined) {
       addNote({
         variables: {

@@ -5,16 +5,19 @@ import client from "../apollo-client";
 import { RecoilRoot } from "recoil";
 import Layout from "../components/Layout";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const { pathname } = router;
-  console.log(pathname);
+  const pathName = router.pathname;
+
   return (
     <RecoilRoot>
       <ApolloProvider client={client}>
         <GlobalStyle />
-        {pathname !== "/" && pathname !== "/Mypage" ? (
+        {pathName === "/SignUp" ||
+        pathName.includes("/detail") ||
+        pathName.includes("/WritePost") ? (
           <Component {...pageProps} />
         ) : (
           <Layout>

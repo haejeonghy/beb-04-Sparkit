@@ -1,20 +1,15 @@
 import styled from "styled-components";
-
 import { GiAbstract048 } from "react-icons/gi";
 import Image, { ImageLoader } from "next/image";
 import Link from "next/link";
-
 import sparkLogo from "../../assets/sparkLogo.png";
 import LikeAndComment, {
   MainListLikeButton,
   MainListContentP,
 } from "./LikeAndComment";
-
 import { darkTheme } from "../../styles/theme";
-
 import { useRouter } from "next/router";
-
-import { GetPosts, Results, BackColor, Tags } from "../../types/spark";
+import { GetPosts } from "../../types/spark";
 
 interface Props {
   data: GetPosts[];
@@ -27,7 +22,7 @@ interface Loader {
 }
 
 const myLoader = ({ src, width, quality }: Loader) => {
-  return `http://localhost:3000/${src}?w=${width}&q=${quality || 75}`;
+  return `${src}?w=${width}&q=${quality || 75}`;
 };
 
 const MainList = ({ data }: Props) => {
@@ -41,6 +36,7 @@ const MainList = ({ data }: Props) => {
       {!data && "Loading.."}
       {data &&
         data?.map((item, index) => {
+          console.log(item.writer);
           let { title } = item;
           title = title || "spark";
           const uri = `/detail/${title}/${item.id}`;
@@ -50,7 +46,7 @@ const MainList = ({ data }: Props) => {
                 <MainListSpan>
                   <GiAbstract048 />
                 </MainListSpan>
-                <MainListSpan>{item.writer?.nickname ?? "test"}</MainListSpan>
+                <MainListSpan>{item.writer?.nickname}</MainListSpan>
                 {item.hashtags.map((tag, idx) => {
                   return (
                     <MainListSpan key={tag.hashtag + idx}>
@@ -58,7 +54,9 @@ const MainList = ({ data }: Props) => {
                     </MainListSpan>
                   );
                 })}
-                <MainListTime>{item.created_at}</MainListTime>
+                <MainListTime>
+                  {String(new Date(item.created_at + "Z").toLocaleString())}
+                </MainListTime>
               </MainListP>
               <MainListDiv>
                 <MainListImgBox>
@@ -66,7 +64,11 @@ const MainList = ({ data }: Props) => {
                     <LinkA>
                       <Image
                         loader={myLoader as ImageLoader}
-                        src={sparkLogo}
+                        src={
+                          item.images !== null && item.images.length > 0
+                            ? item.images[0].image_path
+                            : sparkLogo
+                        }
                         alt="logo image"
                         width={120}
                         height={120}

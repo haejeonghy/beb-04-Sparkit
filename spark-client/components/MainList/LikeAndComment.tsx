@@ -76,7 +76,6 @@ const LikeAndComment = ({ postData }: Props) => {
 
   GetUserId();
   const [userId] = useRecoilState(userIdState);
-  console.log(userId);
   useLayoutEffect(() => {
     if (!likes) return;
     const likesUserIds = likes.map((item) => item.user_id);

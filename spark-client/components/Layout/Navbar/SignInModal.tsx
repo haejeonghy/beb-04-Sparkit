@@ -22,9 +22,6 @@ const OrderModal = (props: props): ReactElement => {
   const [login, { data, loading, error }] = useMutation(LOGIN);
   const router = useRouter();
   const handleClick = () => {
-    console.log("ID: ", login_id);
-    console.log("PW: ", login_pw);
-
     let cont = login({
       variables: {
         email: login_id,

@@ -26,7 +26,7 @@ const DetailPage = ({ params, data, onClick }: Props) => {
   const { hashtags } = getPost;
   const { likes } = getPost;
   const { images } = getPost;
-  const [postTitle, postId] = params || [];
+  const [postTitle] = params || [];
 
   return (
     <Layout>
