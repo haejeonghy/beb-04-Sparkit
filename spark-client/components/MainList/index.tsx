@@ -1,4 +1,3 @@
-import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 
 import { GiAbstract048 } from "react-icons/gi";
@@ -9,7 +8,7 @@ import sparkLogo from "../../assets/sparkLogo.png";
 import LikeAndComment, {
   MainListLikeButton,
   MainListContentP,
-} from "../../components/LikeAndComment";
+} from "./LikeAndComment";
 
 import { darkTheme } from "../../styles/theme";
 

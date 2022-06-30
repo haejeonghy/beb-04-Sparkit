@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import SignInModal from "./SignInModal";
 import SignUpModal from "./SignUpModal";
 import styled from "styled-components";
-import SignUp from "./../pages/SignUp";
+import SignUp from "../../../pages/SignUp";
 interface Props {
   position: string;
 }
@@ -129,7 +129,7 @@ const NavBar = (): ReactElement => {
     setshowSignIn(!showSignIn);
   }
   function logout() {
-    router.push("./");
+    router.push("/");
     setLog(false);
     isLoggedIn = window.sessionStorage.clear();
   }
@@ -142,8 +142,8 @@ const NavBar = (): ReactElement => {
 
       {log ? (
         <BtnContainer>
-          <MyPage onClick={() => router.push("./Mypage")}>마이페이지</MyPage>
-          <SignPost onClick={() => router.push("./WritePost")}>글쓰기</SignPost>
+          <MyPage onClick={() => router.push("/Mypage")}>마이페이지</MyPage>
+          <SignPost onClick={() => router.push("/WritePost")}>글쓰기</SignPost>
           <Logout onClick={logout}>로그아웃</Logout>
         </BtnContainer>
       ) : (

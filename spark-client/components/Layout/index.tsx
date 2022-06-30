@@ -1,6 +1,6 @@
 import React from "react";
-import NavBar from "./NavBar";
-import Main from "./Main";
+import NavBar from "./Navbar";
+import Main from "./Main/Main";
 
 type Props = {
   children: React.ReactNode;

@@ -3,16 +3,10 @@ import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import styled from "styled-components";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { sha256 } from "js-sha256";
+import { SIGN_UP } from "../query/MutationQuery";
 //회원가입시 gql로
 //email, nickname, password, account , created_at , balance
-const SIGN_UP = gql`
-  mutation CreateUser($email: String!, $password: String!, $nickname: String!) {
-    createUser(email: $email, password: $password, nickname: $nickname)
-  }
-`;
+
 interface IFormValue {
   nickname?: string;
   email?: string;
@@ -185,11 +179,11 @@ const SignUp: React.FC = () => {
             },
           })}
           placeholder="Email"
-          autoComplete="on"
           onChange={(e) => {
             setEmail(e.target.value);
           }}
         />
+        <span>{errors.email && "이메일 형식이 맞지 않습니다."}</span>
         <FormLabel>Password</FormLabel>
         <FormInput
           {...register("password", {
@@ -204,6 +198,7 @@ const SignUp: React.FC = () => {
             setPassword(e.target.value);
           }}
         />
+        <span>{errors.password && "비밀번호 형식이 맞지 않습니다."}</span>
         {/* <FormLabel>Password_confirm</FormLabel>
         <FormInput
           {...register("password_confirm", {

@@ -1,9 +1,13 @@
 import styled from "styled-components";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { GrEdit } from "react-icons/gr";
-import { useState } from "react";
-import { GetPosts } from "../types/spark";
-import { gql, useMutation } from "@apollo/client";
+import { useLayoutEffect, useState } from "react";
+import { GetPosts } from "../../types/spark";
+import { gql, useMutation, useQuery } from "@apollo/client";
+import { GetPostsByUserId } from "../../types/spark";
+import GetUserId from "../../states/userId";
+import { useRecoilState } from "recoil";
+import { userIdState } from "../../states/spark";
 
 export const MainListContentP = styled.p`
   padding: 4px 0 8px;
@@ -58,29 +62,33 @@ interface Props {
 }
 
 const LIKEIT = gql`
-  mutation CreateLikes($post_id: Int, $user_id: Int, $access_token: String) {
-    createLikes(
-      post_id: $post_id
-      user_id: $user_id
-      access_token: $access_token
-    )
+  mutation CreateLikes($postId: Int, $userId: Int, $accessToken: String) {
+    createLikes(post_id: $postId, user_id: $userId, access_token: $accessToken)
   }
 `;
-
 const LikeAndComment = ({ postData }: Props) => {
-  console.log(postData.likes, "dsanlkdnsaldnklsan");
   const { likes } = postData;
-  console.log(likes);
+
   const accessToken = window.sessionStorage.getItem("userInfo");
-  const [createLikes, { data, loading, error }] = useMutation(LIKEIT);
+  const [createLikes] = useMutation(LIKEIT);
   const [isLikeClicked, setIsLikeClicked] = useState(false);
-  const [postLikes, setPostLikes] = useState(0);
+  const [postLikes, setPostLikes] = useState(likes?.length);
+
+  GetUserId();
+  const [userId] = useRecoilState(userIdState);
+  console.log(userId);
+  useLayoutEffect(() => {
+    if (!likes) return;
+    const likesUserIds = likes.map((item) => item.user_id);
+    setIsLikeClicked(likesUserIds.includes(userId));
+  }, []);
+
   const LikeVotting = () => {
     setPostLikes((prev) => (prev += 1));
     const args = {
-      post_id: postData.id,
-      user_id: postData.user_id,
-      access_token: accessToken,
+      postId: postData.id,
+      userId: userId,
+      accessToken: accessToken,
     };
     createLikes({ variables: args });
   };
@@ -89,7 +97,6 @@ const LikeAndComment = ({ postData }: Props) => {
     setIsLikeClicked(true);
     LikeVotting();
   };
-
   return (
     <MainListContentP>
       <MainListLikeButton type="button" onClick={handleLikeButtonClick}>

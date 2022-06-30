@@ -7,16 +7,6 @@ import { postsState } from "../states/spark";
 
 import MainList from "../components/MainList";
 
-// const GET_TAG_POST = gql`
-//   query getTagPost($postId: String!) {
-//     post(id: $postId) {
-//       id
-//       title
-//       content
-//       like @client
-//     }
-//   }
-// `;
 
 const Home: NextPage = ({}) => {
   const [postData] = useRecoilState(postsState);

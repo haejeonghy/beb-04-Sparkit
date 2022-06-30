@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { darkTheme } from "../styles/theme";
+import { darkTheme } from "../../../styles/theme";
 
 import Aside from "./Aside";
 

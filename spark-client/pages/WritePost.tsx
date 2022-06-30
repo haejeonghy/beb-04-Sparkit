@@ -2,24 +2,13 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useQuery, useMutation, gql } from "@apollo/client";
 import axios from "axios";
-
-const CREATE_POST = gql`
-  mutation Mutation(
-    $title: String!
-    $post_content: String!
-    $user_id: Int
-    $hashtags: [String]
-    $images: [String]
-  ) {
-    createPost(
-      title: $title
-      post_content: $post_content
-      user_id: $user_id
-      hashtags: $hashtags
-      images: $images
-    )
-  }
-`;
+import NavBar from "../components/Layout/Navbar";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import GetUserId from "../states/userId";
+import { useRecoilState } from "recoil";
+import { userIdState } from "../states/spark";
+import { CREATE_POST } from "../query/MutationQuery";
 
 export default function WritePost() {
   const [isImageUpload, setImageUploaded] = useState(false);
@@ -27,28 +16,52 @@ export default function WritePost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [hash, setHash] = useState("");
-  const [addNote, { loading, error }] = useMutation(CREATE_POST);
+  const [accessToken, setAccessToken] = useState("");
+  const [complete, setComplete] = useState(false);
+  const [addNote, { data, loading, error }] = useMutation(CREATE_POST);
+  const router = useRouter();
+  router;
+  useEffect(() => {
+    setAccessToken(window.sessionStorage.getItem("userInfo"));
+  }, []);
+  GetUserId();
+  const [userId] = useRecoilState(userIdState);
+  console.log(userId);
+  const onComplete = () => {
+    if (!complete) {
+      router.push("/");
+      alert("Post created!");
+    }
+    if (complete) {
+      console.error(error);
+    }
+  };
 
   const handleClick = () => {
     // 해시태그 #으로 구분
     let hashtags = hash.split("#");
     hashtags = hashtags.filter((element, i) => element != "");
-
+    console.log(userId);
+    console.log("토큰", accessToken);
     console.log("제목: ", title);
     console.log("컨텐츠: ", content);
     console.log("해시태그: ", hashtags);
     console.log("url들: ", isdataURL);
-
-    addNote({
-      variables: {
-        title: title,
-        post_content: content,
-        user_id: 1,
-        hashtags: hashtags,
-        images: isdataURL,
-      },
-    });
-    console.log("전송완료!");
+    if (title != undefined && content != undefined) {
+      addNote({
+        variables: {
+          title: title,
+          post_content: content,
+          user_id: userId,
+          hashtags: hashtags,
+          images: isdataURL,
+          access_token: accessToken,
+        },
+      });
+      onComplete();
+    } else {
+      alert("제목과 컨텐츠는 필수 항목 입니다.");
+    }
   };
 
   const sendFileToIPFS = async (f: any) => {
@@ -73,6 +86,7 @@ export default function WritePost() {
 
   return (
     <Container>
+      <NavBar />
       <FormWrap>
         <TitleBox>
           <label className="title">Posting to</label>
