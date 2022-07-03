@@ -4,7 +4,6 @@ import { ApolloServer } from "apollo-server-express";
 import http from "http";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import { sequelize } from "./models";
-import "reflect-metadata";
 import { resolvers, typeDefs } from "./graphql/schema";
 import Web3 from "web3";
 export const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
@@ -13,9 +12,7 @@ dotenv.config();
 
 const SPARK_IT_SERVER_PORT = 4000;
 const app = express();
-// app.use((req, res) => {
-//   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-// });
+
 const httpServer = http.createServer(app);
 const apolloServer = new ApolloServer({
   typeDefs,
@@ -24,11 +21,6 @@ const apolloServer = new ApolloServer({
   cache: "bounded",
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
-
-// const corsOptions = {
-//   origin: ["http://localhost:3000", "https://studio.apollographql.com"],
-//   credentials: true,
-// };
 
 async function initApolloServer() {
   await apolloServer.start();
